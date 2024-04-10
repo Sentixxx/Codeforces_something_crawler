@@ -3,9 +3,9 @@ from bs4 import BeautifulSoup
 import os
 from login import load_session
 from login import login
+from getHead import get_head
 
-def get_problem(url, write_down_file=True, filename='new_problem.md'):
-    res = ''
+def get_problem(url, write_down_file=True, head=True):
     print('request...')
     x = session.get(url)
     print('done\n')
@@ -21,11 +21,19 @@ def get_problem(url, write_down_file=True, filename='new_problem.md'):
     header = statement.find(class_="header")
     title = header.find(class_="title").text
     print(title)
+   
+    if head:
+        res = get_head(title)
+    else:
+        res = ''
+   
     filename = '../file/' + title.replace('.', '_') + '.md'
     res += (f"## [{title}]({url})\n")
+   
+    res += '### 题目:\n'
     
     # 时间限制
-    res += ("### Limit: \n")
+    res += ("#### Limit: \n")
     time_limit = header.find(class_="time-limit")
     time_limit_text = []
     for p in time_limit:
@@ -41,20 +49,20 @@ def get_problem(url, write_down_file=True, filename='new_problem.md'):
     res += (f"{memory_limit_text[0]}: {memory_limit_text[1]}\n")
     
     # 题目陈述
-    res += ("### Describe: \n")
+    res += ("#### Describe: \n")
     describe = header.next_sibling
     for p in describe:
         str = p.text
-        str = str.replace("$$$", "$$")
+        str = str.replace("$$$", "$")
         res += (f"{str} \n")
 
     # 输入描述 
-    res += ("### Input: \n")
+    res += ("#### Input: \n")
     input = describe.next_sibling
     first = True
     for p in input:
         str = p.text
-        str = str.replace("$$$", "$$")
+        str = str.replace("$$$", "$")
         if first:
             first = False
             continue
@@ -62,12 +70,12 @@ def get_problem(url, write_down_file=True, filename='new_problem.md'):
             res += (f"{str} \n")
 
     # 输出描述 
-    res += ("### output: \n")
+    res += ("#### output: \n")
     output = describe.next_sibling
     first = True
     for p in output:
         str = p.text
-        str = str.replace("$$$", "$$")
+        str = str.replace("$$$", "$")
         if first:
             first = False
             continue
@@ -75,12 +83,12 @@ def get_problem(url, write_down_file=True, filename='new_problem.md'):
             res += (f"{str} \n")
 
     # 输入说明
-    res += ("### Input-describe: \n")
+    res += ("#### Input-describe: \n")
     describe = describe.next_sibling
     first = True
     for p in describe:
         str = p.text
-        str = str.replace("$$$", "$$")
+        str = str.replace("$$$", "$")
         if first:
             first = False
             continue
@@ -88,12 +96,12 @@ def get_problem(url, write_down_file=True, filename='new_problem.md'):
             res += (f"{str} \n")
 
     # 输出说明
-    res += ("### Output-describe: \n")
+    res += ("#### Output-describe: \n")
     describe = describe.next_sibling
     first = True
     for p in describe:
         str = p.text
-        str = str.replace("$$$", "$$")
+        str = str.replace("$$$", "$")
         if first:
             first = False
             continue
@@ -103,34 +111,41 @@ def get_problem(url, write_down_file=True, filename='new_problem.md'):
     # 样例
     example = soup.find(class_="sample-tests")
     if example:
-        res += ("### Example: \n")
+        res += ("#### Example: \n")
         
-        input = example.find(class_="input")
-        res += ("#### Input: \n")
+        soup_input = example.find('pre')
+        
+        print(f'input:\n {soup_input.prettify()}')
+        with open('../file/soup_input.html', 'w') as f:
+            f.write(soup_input.prettify())
+        
+        res += ("##### Input: \n")
         first = True
-        for p in input:
-            if first:
-                first = False
-                continue
+        
+        cnt = 0
+        for p in soup_input:
+            cnt += 1
             str = p.text
-            str = str.replace("$$$", "$$")
+            str = str.replace("$$$", "$")
             res += (f"{str} \n")
+        print(f'cnt: {cnt}')
         
         output = example.find(class_="output")
-        res += ("#### Output: \n")
+        res += ("##### Output: \n")
         first = True
         for p in output:
             if first:
                 first = False
                 continue
             str = p.text
-            str = str.replace("$$$", "$$")
+            str = str.replace("$$$", "$")
             res += (f"{str} \n")
         
     res += ("### 思路\n\n")
 
     res += ("### 代码\n\n")
     code, lang = getCode(url)
+    print(f'code: {code}, lang: {lang}')
     if lang != '':
         print(lang)
         if lang[:3] == 'C++':
@@ -195,11 +210,15 @@ def check_login(username):
     return os.path.exists(file_path)
 
 username = 'KuriyamaMashiro'
-password = 'Kuri135.+'
+session = None
 if check_login(username):
     print(f'{username} has logged in')
     session = load_session(username)
 else:
+    print('username: ')
+    username = input()
+    print('Password: ')
+    password = input()
     session = login(username, password)
 
 

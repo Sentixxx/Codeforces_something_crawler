@@ -56,7 +56,7 @@ def login(username, password):
     return session
     
 def main():
-    login('KuriyamaMashiro', 'Kuri135.+')
+    login('KuriyamaMashiro', '')
 
 if __name__ == '__main__':
     main()
