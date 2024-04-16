@@ -2,10 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 import os
 from login import load_session
-from login import login
 from getHead import get_head
 
+CF_USERNAME = 'CF_USERNAME'
+CF_PASSWORD = 'CF_PASSWORD'
+
 def get_problem(url, write_down_file=True, head=True):
+    username = os.environ.get(CF_USERNAME)
+    
+    session = load_session(username)
+    
     print('request...')
     x = session.get(url)
     print('done\n')
@@ -169,6 +175,10 @@ def get_problem(url, write_down_file=True, head=True):
     return res    
 
 def getCode(url):
+    username = os.environ.get(CF_USERNAME)
+    
+    session = load_session(username)
+    
     print('request...')
     response = session.get(url)
     print('done\n')
@@ -204,22 +214,6 @@ def getCode(url):
     lang = soup_code.find('span', {'class': 'verdict-accepted'}).parent.find_previous_sibling().text.strip()
     
     return code, lang
-
-def check_login(username):
-    file_path = '../user/' + username + '.pkl'
-    return os.path.exists(file_path)
-
-username = 'KuriyamaMashiro'
-session = None
-if check_login(username):
-    print(f'{username} has logged in')
-    session = load_session(username)
-else:
-    print('username: ')
-    username = input()
-    print('Password: ')
-    password = input()
-    session = login(username, password)
 
 
 def main():

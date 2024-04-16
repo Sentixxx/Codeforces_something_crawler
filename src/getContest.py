@@ -1,10 +1,20 @@
 import requests
 from bs4 import BeautifulSoup
+import os
 
 from getProblem import get_problem
 from getHead import get_head
+from login import login
+
+CF_USERNAME = 'CF_USERNAME'
+CF_PASSWORD = 'CF_PASSWORD'
 
 def get_contest(url, problems_=[], head=True):    
+    username = os.environ.get(CF_USERNAME)
+    password = os.environ.get(CF_PASSWORD)
+
+    login(username, password)    
+    
     # 输出比赛网址
     print(url)
     

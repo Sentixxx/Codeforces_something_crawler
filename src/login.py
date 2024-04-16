@@ -1,8 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import pickle
+import os
 
-session = requests.Session()  # 使用会话来保持cookie
+CF_USERNAME = 'CF_USERNAME'
+CF_PASSWORD = 'CF_PASSWORD'
 
 def save_html(html, filename):
     with open(filename, 'w', encoding='utf-8') as f:
@@ -19,7 +21,7 @@ def load_session(username):
         return pickle.load(f)
 
 def login(username, password):
-    global session
+    session = requests.Session()
     
     login_url = 'https://codeforces.com/enter?back=%2F'
     
@@ -45,7 +47,6 @@ def login(username, password):
         "remember": "off",
         "submit": "Login"
     }
-
     print('login ...')    
     response = session.post(login_url, data=data)
     print(response.status_code)
@@ -56,7 +57,7 @@ def login(username, password):
     return session
     
 def main():
-    login('KuriyamaMashiro', '')
+    login()
 
 if __name__ == '__main__':
     main()
