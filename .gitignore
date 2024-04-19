@@ -1,5 +1,6 @@
 file/*
-venv/
+!file/.gitkeep
 .venv/
 user/*
+!user/.gitkeep
 src/__pycache__/
