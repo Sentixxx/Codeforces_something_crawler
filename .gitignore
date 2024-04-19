@@ -1,4 +1,5 @@
 file/*
 venv/
+.venv/
 user/*
 src/__pycache__/
