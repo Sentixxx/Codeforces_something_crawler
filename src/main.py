@@ -8,8 +8,8 @@ print('main')
 # 获取参数
 opts, args = getopt(
     sys.argv[1:],
-    "u:p:o:",
-    ["url=", "problems=", "only="]
+    "u:p:i:o:",
+    ["url=", "problems=","id=", "only="]
 )
 
 # 获取比赛网址
@@ -23,10 +23,13 @@ for opt, arg in opts:
     if opt in ('-p', '--problems'):
         problems = arg.split(',')
         print(problems)
+    if opt in ('-i', '--id'):
+        url = f'https://codeforces.com/contest/{arg}'
     if opt in ('-o', '--only'):
         url = arg
         get_problem(url=url)
         sys.exit()
+
 
 print(url)
 print(problems)
