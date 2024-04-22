@@ -20,7 +20,7 @@ def get_index(url):
     print(options)
 
     print('write down json...')
-    file_path_json = '../file/options.json'
+    file_path_json = 'file/options.json'
     with open(file_path_json, 'w', encoding='utf-8') as f:
         json.dump(options, f)
     

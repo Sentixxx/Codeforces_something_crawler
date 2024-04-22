@@ -33,7 +33,7 @@ def get_problem(url, write_down_file=True, head=True):
     else:
         res = ''
    
-    filename = '../file/' + title.replace('.', '_') + '.md'
+    filename = 'file/' + title.replace('.', '_') + '.md'
     res += (f"## [{title}]({url})\n")
    
     res += '### 题目:\n'
@@ -122,7 +122,7 @@ def get_problem(url, write_down_file=True, head=True):
         soup_input = example.find('pre')
         
         print(f'input:\n {soup_input.prettify()}')
-        with open('../file/soup_input.html', 'w') as f:
+        with open('file/soup_input.html', 'w') as f:
             f.write(soup_input.prettify())
         
         res += ("##### Input: \n")

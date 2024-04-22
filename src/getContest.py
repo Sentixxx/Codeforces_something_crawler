@@ -33,7 +33,7 @@ def get_contest(url, problems_=[], head=True):
     print('')
     
     # 创建md文件
-    filename = '../file/' + contest.replace(' ', '_') + '.md'
+    filename = 'file/' + contest.replace(' ', '_') + '.md'
     res = get_head(contest)
     # with open(filename, "w", encoding="utf-8") as f:
     #     f.write(f"# [{contest}]({url})\n")

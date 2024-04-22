@@ -11,12 +11,13 @@ def save_html(html, filename):
         f.write(html)
         
 def save_session(session, username):
-    filename = '../user/' + username + '.pkl'
+
+    filename = 'user/' + username + '.pkl'
     with open(filename, 'wb') as f:
         pickle.dump(session, f)
         
 def load_session(username):
-    filename = '../user/' + username + '.pkl'
+    filename = 'user/' + username + '.pkl'
     with open(filename, 'rb') as f:
         return pickle.load(f)
 

@@ -15,7 +15,7 @@ def get_head(title, asfile=False):
     res += '---\n\n'    
     print(res)
     if asfile:
-        with open(f'../file/{title}.md', 'w') as f:
+        with open(f'file/{title}.md', 'w') as f:
             f.write(res)
     return res
     
